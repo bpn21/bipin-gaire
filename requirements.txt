@@ -10,3 +10,5 @@ python-dotenv
 pydantic[email]
 pwdlib[argon2]
 groq
+pytest
+httpx
