@@ -6,8 +6,8 @@ An AI-powered candidate management system built with FastAPI and React.
 
 1. Ensure you have Docker and Docker Compose installed.
 2. Configure your `.env` in the `backend` directory.
-3. **Stop any local dev servers** (like `yarn dev`) to avoid port conflicts on `5173`.
-4. Start the entire system using **yarn dev** in Docker:
+
+3. Start the entire system using **yarn dev** in Docker:
    ```bash
    docker compose up --build
    ```
@@ -18,6 +18,7 @@ An AI-powered candidate management system built with FastAPI and React.
 If you prefer to run services manually:
 
 #### Backend Setup
+
 1. Navigate to the `backend` directory.
 2. Start the API:
    ```bash
@@ -25,6 +26,7 @@ If you prefer to run services manually:
    ```
 
 #### Frontend Setup
+
 1. Navigate to the `frontend` directory.
 2. Install dependencies and run:
    ```bash
@@ -69,7 +71,7 @@ Groq offers exceptionally low latency for large language models. Using the Llama
 
 ---
 
-## 📡 API Examples (CURL)
+## API Examples (CURL)
 
 ### 1. Register User
 
@@ -155,3 +157,27 @@ To run the API tests:
 cd backend
 python3 -m pytest tests/test_api.py
 ```
+
+### Debugging
+
+All the data is being fetched at once and is loaded in python list. The concept of pagination is to save bandwidth, instead of fetching all the data at once.
+
+The solution can be like:
+page_size = 10
+offset = 20
+query = "SELECT \* FROM products ORDER BY id LIMIT 10 OFFSET 20" its lazy, database is not hit here.
+db.execute(query, (page_size, offset)) << Database is hit at this time.
+
+### Learnings
+
+Worked with FastAPI and Pydantic for the first time.
+-FastAPI
+-Pydantic
+-How to secure APIs using FastAPI.
+-Making schemas for API inputs and outputs.
+-Sqllite is not a server database. It is a file based database.
+
+No migrations needed, simple and easy.
+
+Defining relations between tables in SQLALchemy is just like defining relationships in Django ORM.
+related_name in Django ORM is same as in SQLALchemy.

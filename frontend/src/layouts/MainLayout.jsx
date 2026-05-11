@@ -29,7 +29,6 @@ const MainLayout = () => {
   };
 
   const navItems = [
-    // { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
     { name: "Candidate Detail", path: "/search-candidate", icon: Search },
     { name: "Candidates List", path: "/candidates", icon: Users },
     { name: "Add Candidate", path: "/add-candidate", icon: Users },
