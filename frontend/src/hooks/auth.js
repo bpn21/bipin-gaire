@@ -19,7 +19,7 @@ export const useAuth = () => {
 
   const login = async (data) => {
     try {
-      const response = await api.post("/login/", data);
+      const response = await api.post("/login", data);
       localStorage.setItem("access_token", response.data.access_token);
       localStorage.setItem("refresh_token", response.data.refresh_token);
       await getWhoAmI();
@@ -33,7 +33,7 @@ export const useAuth = () => {
 
   const register = async (data) => {
     try {
-      const response = await api.post("/register/", data);
+      const response = await api.post("/register", data);
       localStorage.setItem("access_token", response.data.access_token);
       localStorage.setItem("refresh_token", response.data.refresh_token);
       await getWhoAmI();

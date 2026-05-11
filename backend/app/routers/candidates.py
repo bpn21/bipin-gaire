@@ -15,7 +15,7 @@ router = APIRouter(
     tags=["candidates"]
 )
 
-@router.post("/", response_model=schemas.Candidate, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=schemas.Candidate, status_code=status.HTTP_201_CREATED)
 def create_candidate(
     candidate: schemas.CandidateCreate, 
     db: Session = Depends(get_db),
@@ -24,7 +24,7 @@ def create_candidate(
     return candidate_service.create_candidate(db=db, candidate=candidate, reviewer_id=current_user.id)
 
 
-@router.get("/", response_model=schemas.CandidatePagination)
+@router.get("", response_model=schemas.CandidatePagination)
 def read_candidates(
     skip: int = 0, 
     limit: int = 20, 

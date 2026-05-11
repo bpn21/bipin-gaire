@@ -6,7 +6,7 @@ export const useCandidate = () => {
   const getCandidates = async (skip = 0, limit = 20, search = "") => {
     try {
       const response = await api.get(
-        `/candidates/?skip=${skip}&limit=${limit}${search ? `&search=${search}` : ""}`,
+        `/candidates?skip=${skip}&limit=${limit}${search ? `&search=${search}` : ""}`,
       );
       return response;
     } catch (error) {
@@ -58,7 +58,7 @@ export const useCandidate = () => {
 
   const createCandidate = async (data) => {
     try {
-      const response = await api.post("/candidates/", data);
+      const response = await api.post("/candidates", data);
       toast.success("Candidate registered successfully");
       return response;
     } catch (error) {
