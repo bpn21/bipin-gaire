@@ -46,6 +46,7 @@ If you prefer to run services manually:
 - `SECRET_KEY`: `your-secret-key-for-dev`
 - `ALGORITHM`: `HS256`
 - `ALLOWED_ORIGINS`: `http://localhost:5173`
+- YOUR_GROQ_API_KEY_HERE=YOUR_GROQ_API_KEY_HERE
 
 ## Architectural Decision Records (ADR)
 
