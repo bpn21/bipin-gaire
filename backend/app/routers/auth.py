@@ -50,6 +50,14 @@ async def refresh_token(
             headers={"WWW-Authenticate": "Bearer"},
         )
     
+    blacklisted = db.query(models.BlacklistedToken).filter(models.BlacklistedToken.token == refresh_data.refresh_token).first()
+    if blacklisted:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Refresh token has been blacklisted",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
     email = payload.get("sub")
     user = db.query(models.User).filter(models.User.email == email).first()
     if not user:
@@ -109,12 +117,16 @@ async def logout(
     current_user: models.User = Depends(auth.get_current_user)
 ):
     if data.access_token:
-        access_token_blacklist = models.BlacklistedToken(token=data.access_token)
-        db.add(access_token_blacklist)
+        exists = db.query(models.BlacklistedToken).filter(models.BlacklistedToken.token == data.access_token).first()
+        if not exists:
+            access_token_blacklist = models.BlacklistedToken(token=data.access_token)
+            db.add(access_token_blacklist)
     
     if data.refresh_token:
-        refresh_token_blacklist = models.BlacklistedToken(token=data.refresh_token)
-        db.add(refresh_token_blacklist)
+        exists = db.query(models.BlacklistedToken).filter(models.BlacklistedToken.token == data.refresh_token).first()
+        if not exists:
+            refresh_token_blacklist = models.BlacklistedToken(token=data.refresh_token)
+            db.add(refresh_token_blacklist)
         
     db.commit()
     return {"detail": "Successfully logged out"}
