@@ -45,7 +45,7 @@ If you prefer to run services manually:
 - `ALGORITHM`: `HS256`
 - `ALLOWED_ORIGINS`: `http://localhost:5173`
 
-- GROQ_API_KEY: YOUR_GROQ_API_KEY_HERE
+- GROQ_API_KEY: >>>YOUR_GROQ_API_KEY_HERE<<<<
 
 ## Architectural Decision Records (ADR)
 
