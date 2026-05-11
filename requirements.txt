@@ -9,3 +9,4 @@ passlib[bcrypt]
 python-dotenv
 pydantic[email]
 pwdlib[argon2]
+groq

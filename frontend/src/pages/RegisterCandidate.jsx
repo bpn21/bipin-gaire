@@ -273,6 +273,7 @@ const RegisterCandidate = () => {
               name="skills"
               className="form-input"
               placeholder="e.g. React, Python, AWS"
+              required
               value={formData.skills}
               onChange={handleChange}
               style={{

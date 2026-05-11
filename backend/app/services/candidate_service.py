@@ -3,8 +3,22 @@ from app import models, schemas
 from app.websocket_manager import manager
 import asyncio
 import logging
+import os
+from groq import Groq
+from dotenv import load_dotenv
+
+load_dotenv()
 
 logger = logging.getLogger(__name__)
+
+ai_logger = logging.getLogger("ai_summary")
+ai_logger.setLevel(logging.INFO)
+if not ai_logger.handlers:
+    ai_handler = logging.FileHandler("ai_summary.log")
+    ai_handler.setFormatter(logging.Formatter("%(asctime)s - %(message)s"))
+    ai_logger.addHandler(ai_handler)
+
+client = Groq()
 
 def get_candidate(db: Session, candidate_id: int, user: models.User):
     # query = db.query(models.Candidate).filter(models.Candidate.id == candidate_id)
@@ -132,3 +146,48 @@ def update_summary(db: Session, candidate_id: int, summary: str, user: models.Us
         db.commit()
         db.refresh(db_candidate)
     return db_candidate
+
+def generate_candidate_summary(db: Session, candidate_id: int, user: models.User, style: str = "concise"):
+    db_candidate = get_candidate(db, candidate_id, user)
+    if not db_candidate:
+        return None
+    
+    skills_text = db_candidate.skills or "No skills listed."
+    notes_text = db_candidate.internal_notes or "No internal notes."
+    role_text = db_candidate.role_applied.value
+    
+    input_text = f"Candidate Name: {db_candidate.name}\nRole Applied: {role_text}\nSkills: {skills_text}\nNotes: {notes_text}"
+    
+    style_prompts = {
+        "concise": "Summarize the following candidate profile in 2-3 clear sentences.",
+        "bullet":  "Summarize the following candidate profile as 5 bullet points.",
+        "detailed":"Write a detailed summary of the candidate profile in 2-3 paragraphs."
+    }
+
+    prompt = style_prompts.get(style, style_prompts["concise"])
+
+    import time
+    time.sleep(2)
+
+    try:
+        response = client.chat.completions.create(
+            model="openai/gpt-oss-120b",
+            messages=[
+                {
+                    "role": "user",
+                    "content": f"{prompt}\n\n---\n\n{input_text}"
+                }
+            ]
+        )
+        summary = response.choices[0].message.content
+        
+        db_candidate.ai_summary = summary
+        db.commit()
+        db.refresh(db_candidate)
+        
+        ai_logger.info(f"Ai Summary generate for this candidate {db_candidate.name} at this time")
+        
+        return db_candidate
+    except Exception as e:
+        logger.error(f"Error generating summary with Groq: {e}")
+        raise e

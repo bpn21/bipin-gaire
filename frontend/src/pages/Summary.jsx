@@ -9,8 +9,12 @@ const Summary = () => {
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [summaryData, setSummaryData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const { getCandidatesSummary, getCandidates, getCandidateById } =
-    useCandidate();
+  const {
+    getCandidatesSummary,
+    getCandidates,
+    getCandidateById,
+    generateCandidateSummary,
+  } = useCandidate();
   const dropdownRef = React.useRef(null);
 
   const fetchCandidates = async (search = "") => {
@@ -64,9 +68,23 @@ const Summary = () => {
     try {
       const res = await getCandidateById(candidate.id);
       setSummaryData({
-        summary:
-          res.data.internal_notes ||
-          "No specific insights available for this candidate.",
+        summary: res.data.ai_summary,
+        internalNotes: res.data.internal_notes,
+      });
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGenerateSummary = async (style = "concise") => {
+    if (!selectedCandidate) return;
+    setLoading(true);
+    try {
+      const res = await generateCandidateSummary(selectedCandidate.id, style);
+      setSummaryData({
+        summary: res.data.ai_summary,
+        internalNotes: res.data.internal_notes,
       });
     } catch (error) {
     } finally {
@@ -240,14 +258,40 @@ const Summary = () => {
         </div>
 
         {summaryData ? (
-          <div
-            style={{
-              fontSize: "1.125rem",
-              color: "var(--text-main)",
-              whiteSpace: "pre-wrap",
-            }}
-          >
-            {summaryData.summary}
+          <div>
+            <div
+              style={{
+                fontSize: "1.125rem",
+                color: "var(--text-main)",
+                whiteSpace: "pre-wrap",
+                marginBottom: "2rem",
+              }}
+            >
+              {summaryData.summary ||
+                summaryData.internalNotes ||
+                "No specific insights available for this candidate."}
+            </div>
+
+            {selectedCandidate && (
+              <button
+                onClick={() => handleGenerateSummary()}
+                disabled={loading}
+                className="btn-primary"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  padding: "10px 20px",
+                  opacity: loading ? 0.7 : 1,
+                  cursor: loading ? "not-allowed" : "pointer",
+                }}
+              >
+                <Sparkles size={18} />
+                {summaryData.summary
+                  ? "Regenerate AI Summary"
+                  : "Generate AI Summary"}
+              </button>
+            )}
           </div>
         ) : (
           <div
@@ -262,6 +306,25 @@ const Summary = () => {
               style={{ marginBottom: "1rem", opacity: 0.2 }}
             />
             <p>No summary data available at this time.</p>
+            {selectedCandidate && (
+              <button
+                onClick={() => handleGenerateSummary()}
+                disabled={loading}
+                className="btn-primary"
+                style={{
+                  marginTop: "1.5rem",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  padding: "10px 20px",
+                  opacity: loading ? 0.7 : 1,
+                  cursor: loading ? "not-allowed" : "pointer",
+                }}
+              >
+                <Sparkles size={18} />
+                Generate AI Summary
+              </button>
+            )}
           </div>
         )}
       </div>

@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   api:
     build:
@@ -13,3 +11,6 @@ services:
     env_file:
       - ./backend/.env
     container_name: backend
+
+  # db:
+  # cache:

@@ -10,6 +10,7 @@ class CandidateBase(BaseModel):
     status: CandidateStatus = CandidateStatus.NEW
     skills: Optional[str] = None
     internal_notes: Optional[str] = None
+    ai_summary: Optional[str] = None
 
     @field_validator('role_applied', 'status', mode='before')
     @classmethod
@@ -29,6 +30,7 @@ class CandidateUpdate(BaseModel):
     status: Optional[CandidateStatus] = None
     skills: Optional[str] = None
     internal_notes: Optional[str] = None
+    ai_summary: Optional[str] = None
 
     
 class ScoreBase(BaseModel):
@@ -76,6 +78,9 @@ class CandidatePagination(BaseModel):
 
 class CandidateSummary(BaseModel):
     summary: str
+
+class CandidateSummaryRequest(BaseModel):
+    style: str = "concise"
 
 class UserBase(BaseModel):
     email: EmailStr

@@ -80,6 +80,19 @@ export const useCandidate = () => {
     }
   };
 
+  const generateCandidateSummary = async (id, style = "concise") => {
+    try {
+      const response = await api.post(`/candidates/${id}/summary`, { style });
+      toast.success("Summary generated successfully");
+      return response;
+    } catch (error) {
+      toast.error(
+        error.response?.data?.detail || "Failed to generate summary",
+      );
+      throw error;
+    }
+  };
+
   return {
     getCandidates,
     getCandidateById,
@@ -88,6 +101,7 @@ export const useCandidate = () => {
     addCandidateScore,
     createCandidate,
     updateCandidate,
+    generateCandidateSummary,
   };
 };
 

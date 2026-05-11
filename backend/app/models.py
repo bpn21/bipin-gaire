@@ -43,6 +43,7 @@ class Candidate(Base):
     status = Column(String, default=CandidateStatus.NEW, index=True)
     skills = Column(Text, nullable=True)
     internal_notes = Column(Text, nullable=True)
+    ai_summary = Column(Text, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     reviewer_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 

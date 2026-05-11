@@ -35,7 +35,7 @@ const MainLayout = () => {
     { name: "Add Candidate", path: "/add-candidate", icon: Users },
     { name: "Set Score", path: "/set-score", icon: Star },
     { name: "Performance", path: "/performance", icon: TrendingUp },
-    // { name: "Summary", path: "/summary", icon: FileText },
+    { name: "AI Generated Summary", path: "/summary", icon: FileText },
     { name: "Stream Scores", path: "/stream-scores", icon: Activity },
   ];
 

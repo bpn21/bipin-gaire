@@ -95,16 +95,24 @@ def get_candidate_scores(
 
 
 @router.post("/{id}/summary", response_model=schemas.Candidate)
-def update_candidate_summary(
+def generate_candidate_summary(
     id: int, 
-    summary_data: schemas.CandidateSummary, 
+    summary_request: schemas.CandidateSummaryRequest, 
     db: Session = Depends(get_db),
     current_user: models.User = Depends(auth.get_current_user)
 ):
-    db_candidate = candidate_service.update_summary(db=db, candidate_id=id, summary=summary_data.summary, user=current_user)
-    if db_candidate is None:
-        raise HTTPException(status_code=404, detail="Candidate not found")
-    return db_candidate
+    try:
+        db_candidate = candidate_service.generate_candidate_summary(
+            db=db, 
+            candidate_id=id, 
+            user=current_user, 
+            style=summary_request.style
+        )
+        if db_candidate is None:
+            raise HTTPException(status_code=404, detail="Candidate not found")
+        return db_candidate
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to generate summary: {str(e)}")
 
 
 
