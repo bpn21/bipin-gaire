@@ -9,7 +9,7 @@ import Candidates from "./pages/Candidates";
 import RegisterCandidate from "./pages/RegisterCandidate";
 import CandidateDetail from "./pages/CandidateDetail";
 import Performance from "./pages/Performance";
-import Summary from "./pages/Summary";
+// import Summary from "./pages/Summary";
 import SetScore from "./pages/SetScore";
 import StreamScores from "./pages/StreamScores";
 import { Provider } from "react-redux";
@@ -34,7 +34,7 @@ function App() {
             <Route path="/add-candidate/:id?" element={<RegisterCandidate />} />
 
             <Route path="/performance" element={<Performance />} />
-            <Route path="/summary" element={<Summary />} />
+            {/* <Route path="/summary" element={<Summary />} /> */}
             <Route path="/set-score" element={<SetScore />} />
             <Route path="/stream-scores" element={<StreamScores />} />
             <Route

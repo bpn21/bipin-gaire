@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useCandidate } from '../hooks/candidate';
-import { FileText, Sparkles, ChevronDown, Search } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { useCandidate } from "../hooks/candidate";
+import { FileText, Sparkles, ChevronDown, Search } from "lucide-react";
 
 const Summary = () => {
   const [candidates, setCandidates] = useState({ items: [] });
@@ -9,7 +9,8 @@ const Summary = () => {
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [summaryData, setSummaryData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const { getCandidatesSummary, getCandidates, getCandidateById } = useCandidate();
+  const { getCandidatesSummary, getCandidates, getCandidateById } =
+    useCandidate();
   const dropdownRef = React.useRef(null);
 
   const fetchCandidates = async (search = "") => {
@@ -58,11 +59,15 @@ const Summary = () => {
     setSelectedCandidate(candidate);
     setSearchTerm(candidate.name);
     setIsOpen(false);
-    
+
     setLoading(true);
     try {
       const res = await getCandidateById(candidate.id);
-      setSummaryData({ summary: res.data.internal_notes || "No specific insights available for this candidate." });
+      setSummaryData({
+        summary:
+          res.data.internal_notes ||
+          "No specific insights available for this candidate.",
+      });
     } catch (error) {
     } finally {
       setLoading(false);
@@ -71,7 +76,15 @@ const Summary = () => {
 
   return (
     <div className="summary-page">
-      <h1 style={{ fontSize: '1.875rem', fontWeight: '700', marginBottom: '2rem' }}>Candidate Insights</h1>
+      <h1
+        style={{
+          fontSize: "1.875rem",
+          fontWeight: "700",
+          marginBottom: "2rem",
+        }}
+      >
+        Candidate Insights
+      </h1>
 
       <div
         className="card"
@@ -87,7 +100,14 @@ const Summary = () => {
           style={{ marginBottom: 0, position: "relative" }}
           ref={dropdownRef}
         >
-          <label style={{ color: "#94a3b8", marginBottom: "8px", display: "block", fontSize: "14px" }}>
+          <label
+            style={{
+              color: "#94a3b8",
+              marginBottom: "8px",
+              display: "block",
+              fontSize: "14px",
+            }}
+          >
             Select Candidate for Individual Insight
           </label>
           <div
@@ -97,7 +117,7 @@ const Summary = () => {
             <input
               type="text"
               className="form-input"
-              placeholder="Search Candidate (leave empty for global summary)"
+              placeholder="Search"
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
@@ -196,19 +216,51 @@ const Summary = () => {
         </div>
       </div>
 
-      <div className="card" style={{ padding: '2.5rem', background: 'var(--bg-card)', border: '1px solid var(--border)', lineHeight: '1.8' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '2rem' }}>
+      <div
+        className="card"
+        style={{
+          padding: "2.5rem",
+          background: "var(--bg-card)",
+          border: "1px solid var(--border)",
+          lineHeight: "1.8",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.75rem",
+            marginBottom: "2rem",
+          }}
+        >
           <Sparkles color="var(--primary)" />
-          <h2 style={{ fontSize: '1.25rem', fontWeight: '700' }}>AI-Generated Insights</h2>
+          <h2 style={{ fontSize: "1.25rem", fontWeight: "700" }}>
+            AI-Generated Insights
+          </h2>
         </div>
 
         {summaryData ? (
-          <div style={{ fontSize: '1.125rem', color: 'var(--text-main)', whiteSpace: 'pre-wrap' }}>
+          <div
+            style={{
+              fontSize: "1.125rem",
+              color: "var(--text-main)",
+              whiteSpace: "pre-wrap",
+            }}
+          >
             {summaryData.summary}
           </div>
         ) : (
-          <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
-            <FileText size={48} style={{ marginBottom: '1rem', opacity: 0.2 }} />
+          <div
+            style={{
+              textAlign: "center",
+              padding: "3rem",
+              color: "var(--text-muted)",
+            }}
+          >
+            <FileText
+              size={48}
+              style={{ marginBottom: "1rem", opacity: 0.2 }}
+            />
             <p>No summary data available at this time.</p>
           </div>
         )}
