@@ -13,10 +13,10 @@ load_dotenv()
 
 # https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/#hash-and-verify-the-passwords
 
-SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key-for-dev")
-ALGORITHM = os.getenv("ALGORITHM", "HS256")
-ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "60"))
-REFRESH_TOKEN_EXPIRE_DAYS = int(os.getenv("REFRESH_TOKEN_EXPIRE_DAYS", "7"))
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = os.getenv("ALGORITHM")
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
+REFRESH_TOKEN_EXPIRE_DAYS = int(os.getenv("REFRESH_TOKEN_EXPIRE_DAYS"))
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 password_hash = PasswordHash.recommended()
@@ -73,7 +73,7 @@ def get_current_user(authorization: str = Header(None), db: Session = Depends(da
                 detail="Token has been blacklisted",
                 headers={"WWW-Authenticate": "Bearer"},
             )
-        
+
         payload = decode_access_token(token)
         if payload is None or payload.get("type") != "access":
             raise credentials_exception

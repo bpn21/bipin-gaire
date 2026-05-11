@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./sql_app.db")
+SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
 
 # Ensure the data directory exists for SQLite
 if SQLALCHEMY_DATABASE_URL.startswith("sqlite"):
