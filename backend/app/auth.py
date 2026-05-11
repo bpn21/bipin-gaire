@@ -66,6 +66,14 @@ def get_current_user(authorization: str = Header(None), db: Session = Depends(da
             raise credentials_exception
         token = parts[1]
         
+        blacklisted = db.query(models.BlacklistedToken).filter(models.BlacklistedToken.token == token).first()
+        if blacklisted:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token has been blacklisted",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        
         payload = decode_access_token(token)
         if payload is None or payload.get("type") != "access":
             raise credentials_exception
