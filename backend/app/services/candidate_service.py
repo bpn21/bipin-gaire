@@ -28,7 +28,7 @@ def get_candidate(db: Session, candidate_id: int, user: models.User):
     return query.first()
 
 def get_candidates(db: Session, user: models.User, skip: int = 0, limit: int = 20, search: str = None):
-    query = db.query(models.Candidate)
+    query = db.query(models.Candidate).filter(models.Candidate.status != models.CandidateStatus.ARCHIVED)
     # query = db.query(models.Candidate).options(joinedload(models.Candidate.scores))
     if user.role != "admin":
         query = query.filter(models.Candidate.reviewer_id == user.id)
@@ -112,7 +112,7 @@ def update_candidate(db: Session, candidate_id: int, candidate_update: schemas.C
 def delete_candidate(db: Session, candidate_id: int, user: models.User):
     db_candidate = get_candidate(db, candidate_id, user)
     if db_candidate:
-        db.delete(db_candidate)
+        db_candidate.status = models.CandidateStatus.ARCHIVED
         db.commit()
         return True
     return False
