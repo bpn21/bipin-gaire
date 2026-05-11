@@ -1,4 +1,4 @@
-# Candidate Management System
+# Candidate Recruitment System
 
 An AI-powered candidate management system built with FastAPI and React.
 
