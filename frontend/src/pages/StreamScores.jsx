@@ -1,13 +1,19 @@
 import React, { useState, useCallback } from "react";
 import { useScoreStream } from "../hooks/candidate";
-import { Activity, User, Award, Clock } from "lucide-react";
+import { Activity, User, Award, Clock, X } from "lucide-react";
+import CandidateSearch from "../components/CandidateSearch";
 
 const StreamScores = () => {
   const [updates, setUpdates] = useState([]);
+  const [filterCandidate, setFilterCandidate] = useState(null);
 
   const handleUpdate = useCallback((data) => {
-    setUpdates((prev) => [data, ...prev].slice(0, 50)); // Keep last 50
+    setUpdates((prev) => [data, ...prev].slice(0, 50));
   }, []);
+
+  const filteredUpdates = filterCandidate
+    ? updates.filter((u) => u.candidate_name === filterCandidate.name)
+    : updates;
 
   useScoreStream(handleUpdate);
 
@@ -21,7 +27,9 @@ const StreamScores = () => {
           marginBottom: "32px",
         }}
       >
-        <h1 style={{ fontSize: "30px", fontWeight: "800" }}>Live Score Stream</h1>
+        <h1 style={{ fontSize: "30px", fontWeight: "800" }}>
+          Live Score Stream
+        </h1>
         <div
           style={{
             display: "flex",
@@ -48,8 +56,44 @@ const StreamScores = () => {
         </div>
       </div>
 
+      <div
+        style={{
+          marginBottom: "2rem",
+          display: "flex",
+          gap: "1rem",
+          alignItems: "flex-end",
+        }}
+      >
+        <div style={{ flex: 1 }}>
+          <CandidateSearch
+            onSelect={setFilterCandidate}
+            label="Filter by Candidate"
+            placeholder="Search to filter..."
+            style={{ marginBottom: 0 }}
+          />
+        </div>
+        {filterCandidate && (
+          <button
+            onClick={() => setFilterCandidate(null)}
+            className="btn"
+            style={{
+              background: "#334155",
+              color: "#f8fafc",
+              padding: "10px 16px",
+              borderRadius: "6px",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              marginBottom: "0px",
+            }}
+          >
+            <X size={16} /> Clear Filter
+          </button>
+        )}
+      </div>
+
       <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-        {updates.length === 0 ? (
+        {filteredUpdates.length === 0 ? (
           <div
             className="card"
             style={{
@@ -61,11 +105,14 @@ const StreamScores = () => {
               borderRadius: "8px",
             }}
           >
-            <Activity size={48} style={{ marginBottom: "16px", opacity: 0.5 }} />
+            <Activity
+              size={48}
+              style={{ marginBottom: "16px", opacity: 0.5 }}
+            />
             <p>Waiting for live updates... Try updating a candidate's score.</p>
           </div>
         ) : (
-          updates.map((update, index) => (
+          filteredUpdates.map((update, index) => (
             <div
               key={index}
               className="card"
@@ -96,9 +143,20 @@ const StreamScores = () => {
               </div>
 
               <div style={{ flex: 1 }}>
-                <div style={{ fontSize: "16px", fontWeight: "600", marginBottom: "4px" }}>
-                  <span style={{ color: "#6366f1" }}>{update.reviewer_name}</span> updated score for{" "}
-                  <span style={{ color: "#f8fafc" }}>{update.candidate_name}</span>
+                <div
+                  style={{
+                    fontSize: "16px",
+                    fontWeight: "600",
+                    marginBottom: "4px",
+                  }}
+                >
+                  <span style={{ color: "#6366f1" }}>
+                    {update.reviewer_name}
+                  </span>{" "}
+                  updated score for{" "}
+                  <span style={{ color: "#f8fafc" }}>
+                    {update.candidate_name}
+                  </span>
                 </div>
                 <div
                   style={{
@@ -108,10 +166,27 @@ const StreamScores = () => {
                     color: "#94a3b8",
                   }}
                 >
-                  <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                    Category: <span style={{ color: "#f8fafc", textTransform: "capitalize" }}>{update.category.replace("_", " ")}</span>
+                  <span
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "4px",
+                    }}
+                  >
+                    Category:{" "}
+                    <span
+                      style={{ color: "#f8fafc", textTransform: "capitalize" }}
+                    >
+                      {update.category.replace("_", " ")}
+                    </span>
                   </span>
-                  <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+                  <span
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "4px",
+                    }}
+                  >
                     <Clock size={14} /> Just now
                   </span>
                 </div>
@@ -121,7 +196,12 @@ const StreamScores = () => {
                 style={{
                   fontSize: "24px",
                   fontWeight: "800",
-                  color: update.score >= 4 ? "#10b981" : update.score <= 2 ? "#ef4444" : "#6366f1",
+                  color:
+                    update.score >= 4
+                      ? "#10b981"
+                      : update.score <= 2
+                        ? "#ef4444"
+                        : "#6366f1",
                   padding: "8px 16px",
                   background: "rgba(255, 255, 255, 0.03)",
                   borderRadius: "8px",

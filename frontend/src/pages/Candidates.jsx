@@ -8,7 +8,7 @@ const Candidates = () => {
   const [loading, setLoading] = useState(true);
   const [skip, setSkip] = useState(0);
   const limit = 20;
-  const { getCandidates } = useCandidate();
+  const { getCandidates, deleteCandidate } = useCandidate();
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
 
@@ -23,10 +23,6 @@ const Candidates = () => {
         e.email.toLowerCase().includes(search?.toLowerCase()) ||
         e.role_applied.toLowerCase().includes(search?.toLowerCase()) ||
         e.skills?.toLowerCase().includes(search?.toLowerCase()) ||
-        // e.scores[0]?.score
-        //   ?.toString()
-        //   ?.toLowerCase()
-        //   .includes(search?.toLowerCase()) ||
         e.status.toLowerCase().includes(search?.toLowerCase()),
     );
   }, [candidatesData, search]);
@@ -44,6 +40,19 @@ const Candidates = () => {
     };
     fetchCandidates();
   }, [skip]);
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this candidate?")) {
+      try {
+        await deleteCandidate(id);
+        // Refresh the list
+        const res = await getCandidates(skip, limit);
+        setCandidatesData(res.data);
+      } catch (error) {
+        console.error("Failed to delete candidate:", error);
+      }
+    }
+  };
 
   const handleNext = () => {
     if (skip + limit < candidatesData.total) {
@@ -292,6 +301,19 @@ const Candidates = () => {
                     }}
                   >
                     Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(candidate.id)}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      color: "#ef4444",
+                      cursor: "pointer",
+                      fontSize: "14px",
+                      fontWeight: "600",
+                    }}
+                  >
+                    Delete
                   </button>
                 </td>
               </tr>
