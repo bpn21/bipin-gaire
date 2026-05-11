@@ -86,9 +86,17 @@ export const useCandidate = () => {
       toast.success("Summary generated successfully");
       return response;
     } catch (error) {
-      toast.error(
-        error.response?.data?.detail || "Failed to generate summary",
-      );
+      toast.error(error.response?.data?.detail || "Failed to generate summary");
+      throw error;
+    }
+  };
+
+  const deleteCandidate = async (id) => {
+    try {
+      await api.delete(`/candidates/${id}`);
+      toast.success("Candidate archived successfully");
+    } catch (error) {
+      toast.error(error.response?.data?.detail || "Failed to delete candidate");
       throw error;
     }
   };
@@ -102,6 +110,7 @@ export const useCandidate = () => {
     createCandidate,
     updateCandidate,
     generateCandidateSummary,
+    deleteCandidate,
   };
 };
 
