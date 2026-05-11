@@ -45,8 +45,6 @@ If you prefer to run services manually:
 - `ALGORITHM`: `HS256`
 - `ALLOWED_ORIGINS`: `http://localhost:5173`
 
-FROM ABOVE "YOUR_GROQ_API_KEY_HERE" REMOVE "YOUR" AND "HERE" LETTER AND PASTE IN .env FILE OF BACKEND.
-
 ## Architectural Decision Records (ADR)
 
 ### 1. Database Choice: SQLite
