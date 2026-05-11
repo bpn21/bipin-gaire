@@ -9,6 +9,7 @@ class CandidateStatus(str, enum.Enum):
     REVIEWED = "reviewed"
     HIRED = "hired"
     REJECTED = "rejected"
+    ARCHIVED = "archived"
 
 class ApplicantRole(str, enum.Enum):
     SOFTWARE_ENGINEER = "software_engineer"
