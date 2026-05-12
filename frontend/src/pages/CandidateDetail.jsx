@@ -90,7 +90,10 @@ const CandidateDetail = () => {
         </button>
 
         <div style={{ width: "400px" }}>
-          <CandidateSearch onSelect={handleSelectCandidate} placeholder="Search Candidate..." />
+          <CandidateSearch
+            onSelect={handleSelectCandidate}
+            placeholder="Search Candidate..."
+          />
         </div>
       </div>
 
@@ -296,6 +299,29 @@ const CandidateDetail = () => {
                 }}
               >
                 {candidate.internal_notes || "No internal notes available."}
+              </div>
+            </div>
+            <div style={{ marginTop: "40px" }}>
+              <p
+                style={{
+                  fontSize: "14px",
+                  marginBottom: "12px",
+                  color: "#94a3b8",
+                }}
+              >
+                Notes (option)
+              </p>
+              <div
+                style={{
+                  padding: "20px",
+                  background: "rgba(255, 255, 255, 0.03)",
+                  borderRadius: "12px",
+                  border: "1px solid #334155",
+                  lineHeight: "1.6",
+                  minHeight: "100px",
+                }}
+              >
+                {candidate.scores?.[0]?.note || "No internal notes available."}
               </div>
             </div>
           </div>

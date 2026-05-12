@@ -27,7 +27,10 @@ const SetScore = () => {
 
   const handleSelectCandidate = (candidate) => {
     setSelectedCandidate(candidate);
-    setFormData((prev) => ({ ...prev, candidate_id: candidate ? candidate.id : "" }));
+    setFormData((prev) => ({
+      ...prev,
+      candidate_id: candidate ? candidate.id : "",
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -122,21 +125,19 @@ const SetScore = () => {
             </div>
           </div>
 
-          {user?.role === "admin" && (
-            <div className="form-group">
-              <label htmlFor="note">Assessment Notes</label>
-              <textarea
-                id="note"
-                name="note"
-                className="form-input"
-                placeholder="Provide detailed feedback on the candidate's performance..."
-                value={formData.note}
-                onChange={handleChange}
-                rows="5"
-                style={{ resize: "vertical", background: "#0f172a" }}
-              ></textarea>
-            </div>
-          )}
+          <div className="form-group">
+            <label htmlFor="note">Assessment Notes</label>
+            <textarea
+              id="note"
+              name="note"
+              className="form-input"
+              placeholder="Provide detailed feedback on the candidate's performance..."
+              value={formData.note}
+              onChange={handleChange}
+              rows="5"
+              style={{ resize: "vertical", background: "#0f172a" }}
+            ></textarea>
+          </div>
 
           <div style={{ marginTop: "2rem" }}>
             <button
