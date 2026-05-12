@@ -64,8 +64,7 @@ Preserving candidate data is crucial for historical auditing and maintaining the
 
 ### 3. AI SDK: Groq for Llama 3
 
-Integrate the Groq SDK for AI-powered candidate summarization.
-Groq offers exceptionally low latency for large language models. Using the Llama 3 model provides high-quality summaries while keeping the system responsive.
+Integrate the Groq SDK for AI-powered candidate summarization. Groq offers exceptionally low latency for large language models. The GPT-OSS 120B model is used to generate high-quality candidate summaries while maintaining responsiveness.
 
 ---
 
