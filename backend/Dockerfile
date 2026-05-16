@@ -18,3 +18,18 @@ COPY backend/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
+
+# Difference between CMD and ENTRYPOINTC
+# CMD provides the default command/
+# ENTRYPOINT is also “default”, but different:
+# It is the default executable
+
+# Docker does not execute top-to-bottom like a script.
+
+# Instead:
+
+# It reads the whole image definition
+# Then combines ENTRYPOINT + CMD at runtime
+
+# One-line summary
+# “Default” in Docker usually means CMD — the fallback arguments used when no custom command is provided.

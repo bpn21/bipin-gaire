@@ -62,7 +62,7 @@ SQLite provides a zero-configuration, file-based database that is ideal for rapi
 Implement "Soft Delete" by changing candidate status to `archived` instead of hard-deleting records.
 Preserving candidate data is crucial for historical auditing and maintaining the integrity of related scores and logs. This approach allows for data recovery and better analytics.
 
-### 3. AI SDK: Groq for Llama 3
+### 3. AI SDK: Groq for GPT-OSS
 
 Integrate the Groq SDK for AI-powered candidate summarization. Groq offers exceptionally low latency for large language models. The GPT-OSS 120B model is used to generate high-quality candidate summaries while maintaining responsiveness.
 
